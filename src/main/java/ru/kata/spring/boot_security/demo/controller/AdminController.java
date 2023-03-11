@@ -75,8 +75,8 @@ public class AdminController {
         return "/ADMIN/edit";
     }
 
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") @Valid User user, @PathVariable("id") Long id,
+    @PostMapping("/update")
+    public String update(@ModelAttribute("user") @Valid User user, @RequestParam("id") Long id,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/ADMIN/edit";
@@ -85,8 +85,8 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    @PostMapping("/delete")
+    public String delete(@RequestParam("id") Long id) {
         userService.deleteUserById(id);
         return "redirect:/admin";
     }
