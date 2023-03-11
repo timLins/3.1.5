@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
@@ -28,9 +29,9 @@ public class User implements UserDetails {
     @Column(name = "age")
     @Min(value = 0, message = "Age should be greater 0")
     private int age;
-    @Column(name = "job")
-    @NotEmpty(message = "Write your job")
-    private String job;
+    @Column(name = "email")
+    @Email
+    private String email;
 
     @Column(name = "password")
     @NotEmpty(message = "Write password")
@@ -47,15 +48,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String surname, int age, String job) {
+    public User(String username, String surname, int age, String email) {
         this.username = username;
         this.surname = surname;
         this.age = age;
-        this.job = job;
+        this.email = email;
     }
-    public void addRole(Role role) {
-        this.roles.add(role);
-    }
+
 
     public Long getId() {
         return id;
@@ -86,12 +85,12 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public String getJob() {
-        return job;
+    public String getEmail() {
+        return email;
     }
 
-    public void setJob(String job) {
-        this.job = job;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
@@ -105,6 +104,10 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+    //добавить роль
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 
     @Override
     public String toString() {
@@ -113,7 +116,7 @@ public class User implements UserDetails {
                 ", name='" + username + '\'' +
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
-                ", job='" + job + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 

@@ -31,6 +31,14 @@ public class AdminController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    //в начальной странице админа сразу выводится список пользователей
+    @GetMapping
+    public String allUsers(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "/ADMIN/users_table";
+    }
+
+
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("user") User user, Model model) {
         List<Role> roles = (List<Role>) roleRepository.findAll();
@@ -47,12 +55,6 @@ public class AdminController {
         }
         userService.saveUser(user);
         return "redirect:/admin";
-    }
-
-    @GetMapping
-    public String allUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "/ADMIN/users_table";
     }
 
     @GetMapping("/{id}")
