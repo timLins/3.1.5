@@ -92,17 +92,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).get();
     }
 
-    @Transactional
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-
-        if (optionalUser.isEmpty()) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", username));
-        }
-        return optionalUser.get();
-    }
-
     private Collection<? extends GrantedAuthority> mapRoleToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
     }
