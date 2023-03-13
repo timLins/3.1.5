@@ -100,14 +100,9 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-        User user = optionalUser.get();
-
-        // возвращаем только данные для Security
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(), mapRoleToAuthorities(user.getRoles()));
+        return optionalUser.get();
     }
 
-    // метод преобразует коллекцию Role в Authority
     private Collection<? extends GrantedAuthority> mapRoleToAuthorities(Collection<Role> roles) {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getRole())).collect(Collectors.toList());
     }

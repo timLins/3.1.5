@@ -31,13 +31,11 @@ public class AdminController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    //в начальной странице админа сразу выводится список пользователей
     @GetMapping
     public String allUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
         return "/ADMIN/users_table";
     }
-
 
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("user") User user, Model model) {
@@ -49,7 +47,7 @@ public class AdminController {
 
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("user") @Valid User user,
-                                            BindingResult bindingResult) {
+                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/ADMIN/registration";
         }
@@ -58,7 +56,7 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    public String  show(@PathVariable("id") Long id, Model model) {
+    public String show(@PathVariable("id") Long id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", user.getRoles());

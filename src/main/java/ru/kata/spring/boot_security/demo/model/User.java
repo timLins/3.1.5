@@ -12,7 +12,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-;
 
 @Entity
 @Table(name = "users")
@@ -37,7 +36,7 @@ public class User implements UserDetails {
     @NotEmpty(message = "Write password")
     private String password;
     @ManyToMany(cascade = {CascadeType.PERSIST},
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -55,7 +54,6 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -63,7 +61,6 @@ public class User implements UserDetails {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public void setUsername(String username) {
         this.username = username;
@@ -104,7 +101,7 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    //добавить роль
+
     public void addRole(Role role) {
         this.roles.add(role);
     }
@@ -120,7 +117,6 @@ public class User implements UserDetails {
                 '}';
     }
 
-    // методы UserDetails для Spring Security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();

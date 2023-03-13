@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/show")
     public String userInfo(Model model, Principal principal) {
-        User user =  userService.getUserByUsername(principal.getName());
+        User user = userService.getUserByUsername(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("userRoles", user.getRoles());
         return "/USER/show";
