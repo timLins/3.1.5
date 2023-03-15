@@ -8,9 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.service.UserDetailService;
-
 
 
 @EnableWebSecurity
@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailService userDetailService;
 
     @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler,  UserDetailService userDetailService) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailService userDetailService) {
         this.successUserHandler = successUserHandler;
         this.userDetailService = userDetailService;
 
@@ -29,13 +29,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/index", "/").permitAll() //кто угодно может попасть по этим ссылкам
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/index", "/process_login").permitAll() //кто угодно может попасть по этим ссылкам
                 .antMatchers("/user").hasAnyRole("ADMIN", "USER") //страница юзера доступна и админу и зарегистрированному юзеру
                 .antMatchers("/admin", "/admin/**").hasRole("ADMIN")  //страницы админа только для юзеров с ролью админа
                 .anyRequest().authenticated() //все остальные запросы только для пользователей, прошедщих аунтефикацию
                 .and()
-                .formLogin().successHandler(successUserHandler)
+                .formLogin().loginPage("/process_login")
+                .loginProcessingUrl("/process_login")
+                .successHandler(successUserHandler)
                 .permitAll()
                 .and()
                 .logout()
@@ -49,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return  new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean

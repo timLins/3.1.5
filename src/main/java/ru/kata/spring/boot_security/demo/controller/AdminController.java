@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 ;
@@ -32,8 +34,15 @@ public class AdminController {
     }
 
     @GetMapping
-    public String allUsers(Model model) {
+    public String allUsers(Model model, Principal principal,
+                           @ModelAttribute("user") User user) {
+
+        User admin = userService.getUserByUsername(principal.getName());
+        model.addAttribute("admin", admin);
+        model.addAttribute("userRoles", admin.getRoles());
         model.addAttribute("users", userService.getAllUsers());
+        List<Role> roles = (List<Role>) roleRepository.findAll();
+        model.addAttribute("allRoles", roles);
         return "/ADMIN/users_table";
     }
 
@@ -87,5 +96,10 @@ public class AdminController {
     public String delete(@RequestParam("id") Long id) {
         userService.deleteUserById(id);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/example")
+    public String example(){
+        return "/ADMIN/example";
     }
 }

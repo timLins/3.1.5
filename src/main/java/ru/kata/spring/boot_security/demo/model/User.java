@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -150,5 +151,27 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    @Transient
+    private String stringRoles;
+
+    public String getStringRoles() {
+        return getRoles().toString().replace("[", "")
+                .replace("]", "")
+                .replace(",", "")
+                .replace("ROLE_", "");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return age == user.age && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(stringRoles, user.stringRoles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, surname, age, email, password, roles, stringRoles);
     }
 }

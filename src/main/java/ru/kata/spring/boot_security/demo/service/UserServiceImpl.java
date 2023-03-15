@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user, Long id) {
         User userFromDb = userRepository.findById(id).get();
-        // Если пароль не изменяется, то не кодируем при обновлении
         if (userFromDb.getPassword().equals(user.getPassword())) {
             userRepository.save(user);
         } else {
