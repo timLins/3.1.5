@@ -29,15 +29,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/index", "/process_login").permitAll() //кто угодно может попасть по этим ссылкам
+                .antMatchers("/index", "/").permitAll() //кто угодно может попасть по этим ссылкам
                 .antMatchers("/user").hasAnyRole("ADMIN", "USER") //страница юзера доступна и админу и зарегистрированному юзеру
                 .antMatchers("/admin", "/admin/**").hasRole("ADMIN")  //страницы админа только для юзеров с ролью админа
                 .anyRequest().authenticated() //все остальные запросы только для пользователей, прошедщих аунтефикацию
                 .and()
-                .formLogin().loginPage("/process_login")
-                .loginProcessingUrl("/process_login")
+                .formLogin().loginPage("/login")
                 .successHandler(successUserHandler)
                 .permitAll()
                 .and()
