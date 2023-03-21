@@ -73,8 +73,8 @@ public class RESTController {
     }
 
 
-    @PutMapping("/users/update/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@PathVariable(value = "id") long id, @RequestBody @Valid User user,
+    @PutMapping("/users/update")
+    public ResponseEntity<HttpStatus> updateUser( @RequestBody @Valid User user,
                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMes = new StringBuilder();
@@ -84,7 +84,13 @@ public class RESTController {
             }
             throw new UsernameNotFoundException(errorMes.toString());
         }
-        userService.updateUser(user,id);
+        userService.updateUser(user,user.getId());
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
+        userService.deleteUserById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
