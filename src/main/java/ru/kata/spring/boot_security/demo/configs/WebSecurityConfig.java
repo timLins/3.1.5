@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/index", "/").permitAll() //кто угодно может попасть по этим ссылкам
+                .antMatchers("/index", "/","/api/**").permitAll() //кто угодно может попасть по этим ссылкам
                 .antMatchers("/user").hasAnyRole("ADMIN", "USER") //страница юзера доступна и админу и зарегистрированному юзеру
                 .antMatchers("/admin", "/admin/**").hasRole("ADMIN")  //страницы админа только для юзеров с ролью админа
                 .anyRequest().authenticated() //все остальные запросы только для пользователей, прошедщих аунтефикацию

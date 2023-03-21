@@ -152,26 +152,27 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-    @Transient
-    private String stringRoles;
-
-    public String getStringRoles() {
-        return getRoles().toString().replace("[", "")
-                .replace("]", "")
-                .replace(",", "")
-                .replace("ROLE_", "");
-    }
+//
+//    @Transient
+//    private String stringRoles;
+//
+//    public String getStringRoles() {
+//        return getRoles().toString().replace("[", "")
+//                .replace("]", "")
+//                .replace(",", "")
+//                .replace("ROLE_", "");
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) && Objects.equals(stringRoles, user.stringRoles);
+        return age == user.age && Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, surname, age, email, password, roles, stringRoles);
+        return Objects.hash(id, username, surname, age, email, password, roles);
     }
 }
