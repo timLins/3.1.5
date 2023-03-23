@@ -26,8 +26,9 @@
                 </span>
     </div>
     <div class="btn btn-link">
-        <form th:method="POST" th:action="@{/logout}">
-            <input type="submit" class="btn btn-link link-secondary" value="Logout"/>
+        <form th:method="POST" th:action="@{/logout}"  >
+            <input type="submit" class="btn btn-link link-secondary"
+                   value="Logout" style="color: gray ; text-decoration: none"/>
         </form>
     </div>
 </div>
@@ -146,6 +147,7 @@
                                                                    class="form-label fw-bold">Password</label>
                                                             <input type="password" class="form-control"
                                                                    id="edit_password"
+                                                                   value=""
                                                                    name="Password">
                                                         </div>
 
