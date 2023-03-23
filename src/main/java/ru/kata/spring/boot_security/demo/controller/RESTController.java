@@ -28,11 +28,6 @@ public class RESTController {
         this.userService = userService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "work";
-    }
-
     @GetMapping("/users")
     public List<User> showAllUsers() {
         return userService.getAllUsers();
@@ -73,7 +68,7 @@ public class RESTController {
     }
 
 
-    @PutMapping("/users/update")
+    @PutMapping("/users")
     public ResponseEntity<HttpStatus> updateUser( @RequestBody @Valid User user,
                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
