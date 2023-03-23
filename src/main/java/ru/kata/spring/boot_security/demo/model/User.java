@@ -152,16 +152,21 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-//
-//    @Transient
-//    private String stringRoles;
-//
-//    public String getStringRoles() {
-//        return getRoles().toString().replace("[", "")
-//                .replace("]", "")
-//                .replace(",", "")
-//                .replace("ROLE_", "");
-//    }
+
+    @Transient
+    private String stringRoles;
+
+
+    public String getStringRoles() {
+        return getRoles().toString().replace("[", "")
+                .replace("]", "")
+                .replace(",", "")
+                .replace("ROLE_", "");
+    }
+
+    public void setStringRoles(String stringRoles) {
+        this.stringRoles = stringRoles;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -19,24 +19,8 @@ function getUsers() {
                 out += '<td>' + user.surname + '</td>';
                 out += '<td>' + user.age + '</td>';
                 out += '<td>' + user.email + '</td>';
+                out += '<td>' + user.stringRoles + '</td>'
 
-                let i, role = "";
-                for (i in user.roles) {
-                    if (user.roles[i].role === "ROLE_USER") {
-                        role = "USER";
-                    } else {
-                        role = "ADMIN";
-                    }
-                    if (user.roles.length === 1) {
-                        out += "<td>" + role + "</td>";
-                    }
-                    if (user.roles.length > 1 ) {
-                        if (i === 0) {
-                          out += "<td>" + role + ",";
-                        }
-                        out += role + "</td>";
-                    }
-                }
 
 
 
