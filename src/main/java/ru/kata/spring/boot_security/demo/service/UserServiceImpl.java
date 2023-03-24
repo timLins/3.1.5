@@ -4,12 +4,13 @@ package ru.kata.spring.boot_security.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.Util.UserNotCreatedException;
 import ru.kata.spring.boot_security.demo.Util.UserNotFoundException;
+import ru.kata.spring.boot_security.demo.exception_handling.RestExceptionHandler;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
@@ -24,21 +25,26 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final RestExceptionHandler restExceptionHandler;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder bCryptPasswordEncoder) {
+                           PasswordEncoder bCryptPasswordEncoder, RestExceptionHandler restExceptionHandler) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.restExceptionHandler = restExceptionHandler;
     }
 
     @Transactional
     @Override
     public void saveUser(User user) {
-
+        if (userRepository.findByUsername(user.getUsername()).isEmpty()) {
+            restExceptionHandler.handleCreatedException(new UserNotCreatedException("ERROR"));
+        }
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return;
         }
+
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -65,8 +71,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
-
-        return user.orElseThrow(UserNotFoundException::new);
+        if(user.isEmpty()) {
+            restExceptionHandler.handleFoundException(new UserNotFoundException());
+        }
+        return user.get();
+                //.orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
@@ -83,7 +92,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User getUserByUsername(String username) {
-        if (userRepository.findByUsername(username).isEmpty()){
+        if (userRepository.findByUsername(username).isEmpty()) {
             throw new UsernameNotFoundException("This user not found");
         }
         return userRepository.findByUsername(username).get();
