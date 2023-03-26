@@ -25,21 +25,20 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
-    private final RestExceptionHandler restExceptionHandler;
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder bCryptPasswordEncoder, RestExceptionHandler restExceptionHandler) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.restExceptionHandler = restExceptionHandler;
     }
 
     @Transactional
     @Override
     public void saveUser(User user) {
         if (userRepository.findByUsername(user.getUsername()).isEmpty()) {
-            restExceptionHandler.handleCreatedException(new UserNotCreatedException("ERROR"));
+            throw new UserNotCreatedException("ERROR");
         }
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return;
@@ -72,10 +71,9 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if(user.isEmpty()) {
-            restExceptionHandler.handleFoundException(new UserNotFoundException());
+           throw new UsernameNotFoundException("Not found");
         }
         return user.get();
-                //.orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
@@ -92,9 +90,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User getUserByUsername(String username) {
-        if (userRepository.findByUsername(username).isEmpty()) {
-            throw new UsernameNotFoundException("This user not found");
-        }
         return userRepository.findByUsername(username).get();
     }
 

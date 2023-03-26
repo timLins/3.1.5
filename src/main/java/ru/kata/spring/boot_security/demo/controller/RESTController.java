@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.Util.UserNotCreatedException;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -36,11 +37,7 @@ public class RESTController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid User user) {
-        try {
-            userService.saveUser(user);
-        } catch (Exception e) {
-            throw new UserNotCreatedException("Some problem with create user "+ e.getMessage());
-        }
+        userService.saveUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -49,7 +46,7 @@ public class RESTController {
         try {
             userService.updateUser(user, user.getId());
         } catch (Exception e) {
-            throw new UserNotCreatedException("Some problem with update user "+e.getMessage());
+            throw new UserNotCreatedException("Some problem with update user " + e.getMessage());
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
