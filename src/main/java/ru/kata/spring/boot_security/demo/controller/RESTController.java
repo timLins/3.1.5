@@ -24,7 +24,6 @@ public class RESTController {
 
     private final UserService userService;
 
-
     @Autowired
     public RESTController(UserService userService) {
         this.userService = userService;
